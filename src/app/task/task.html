@@ -1,0 +1,24 @@
+<div class="task-container">
+  <h1>Task Manager</h1>
+
+  <div class="input-row">
+    <input [(ngModel)]="taskTitle" placeholder="Enter a task" />
+    <button (click)="onSubmit()">Add</button>
+  </div>
+
+  <ul class="task-list" *ngIf="tasks.length; else noTasks">
+    <li *ngFor="let task of tasks" [class.task-item]="true" [class.completed]="task.isCompleted">
+      <input
+        type="checkbox"
+        [checked]="task.isCompleted"
+        (change)="toggleStatus(task.id)"
+      />
+      <span>{{ task.title }}</span>
+      <button (click)="deleteTask(task.id)">🗑</button>
+    </li>
+  </ul>
+
+  <ng-template #noTasks>
+    <div class="empty-state">No tasks yet. Start by adding one.</div>
+  </ng-template>
+</div>

@@ -1,18 +1,21 @@
 <div class="task-container">
   <h1>Task Manager</h1>
 
-  <div class="input-row">
-    <input [(ngModel)]="taskTitle" placeholder="Enter a task" />
-    <button (click)="onSubmit()">Add</button>
-  </div>
+  <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+    <div class="input-row">
+      <input formControlName="title" placeholder="Enter a task" />
+      <button type="submit" [disabled]="taskForm.invalid">Add</button>
+    </div>
+
+    <div *ngIf="taskForm.controls['title'].touched && taskForm.controls['title'].invalid">
+      <small *ngIf="taskForm.controls['title'].errors?.['required']">Task title is required.</small>
+      <small *ngIf="taskForm.controls['title'].errors?.['minlength']">Min 3 characters.</small>
+    </div>
+  </form>
 
   <ul class="task-list" *ngIf="tasks.length; else noTasks">
     <li *ngFor="let task of tasks" [class.task-item]="true" [class.completed]="task.isCompleted">
-      <input
-        type="checkbox"
-        [checked]="task.isCompleted"
-        (change)="toggleStatus(task.id)"
-      />
+      <input type="checkbox" [checked]="task.isCompleted" (change)="toggleStatus(task.id)" />
       <span>{{ task.title }}</span>
       <button (click)="deleteTask(task.id)">🗑</button>
     </li>
